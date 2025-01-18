@@ -1,0 +1,37 @@
+{% extends 'layout.html.twig' %}
+
+{% block title %}Blog index{% endblock %}
+
+{% block body %}
+    <h1>Blog index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Title</th>
+                <th>Text</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for blog in blogs %}
+            <tr>
+                <td>{{ blog.id }}</td>
+                <td>{{ blog.title }}</td>
+                <td>{{ blog.text }}</td>
+                <td>
+                    <a href="{{ path('app_blog_show', {'id': blog.id}) }}" class="btn btn-outline-light btn-sm">show</a>
+                    <a href="{{ path('app_blog_edit', {'id': blog.id}) }}" class="btn btn-outline-warning btn-sm">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="4">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_blog_new') }}" class="btn btn-outline-primary">Create new</a>
+{% endblock %}
