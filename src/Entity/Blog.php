@@ -10,6 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\PersistentCollection;
 use PhpParser\Node\Expr\Array_;
 use Symfony\Component\Mime\Address;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: BlogRepository::class)]
 class Blog
@@ -22,18 +23,20 @@ class Blog
     #[ORM\Column(length: 255)]
     private ?string $title = null;
 
+
     #[ORM\Column(type: Types::TEXT)]
     private ?string $text = null;
+
 
     #[ORM\ManyToOne(targetEntity: Category::class)]
     #[ORM\JoinColumn(name: 'category_id', referencedColumnName: 'id')]
     private ?Category $category = null;
 
-    #[ORM\JoinTable(name: 'tags_to_blogs')]
-    #[ORM\JoinColumn(name: 'tag_id', referencedColumnName: 'id')]
-    #[ORM\InverseJoinColumn(name: 'tag_id', referencedColumnName: 'id', unique: true)]
-    #[ORM\ManyToMany(targetEntity: 'App\Entity\Tag')]
-    private Collection $tags;
+    #[ORM\JoinTable(name: 'tags_to_blog')]
+    #[ORM\JoinColumn(name: 'blog_id', referencedColumnName: 'id')]
+    #[ORM\InverseJoinColumn(name: 'tag_id', referencedColumnName: 'id')]
+    #[ORM\ManyToMany(targetEntity: 'App\Entity\Tag', cascade: ['persist'])]
+    private ArrayCollection|PersistentCollection $tags;
 
     public function getId(): ?int
     {
@@ -76,27 +79,26 @@ class Blog
         return $this;
     }
 
-    public function getTags(): Collection
+    public function __construct()
+    {
+        $this->tags = new ArrayCollection();
+    }
+
+    public function getTags(): ArrayCollection|PersistentCollection
     {
         return $this->tags;
     }
-
-    public function setTags(Collection $tags): static
+    public function setTags(ArrayCollection $tags): static
     {
         $this->tags = $tags;
 
         return $this;
     }
 
-    public function addTag(Tag $tag): self
+    public function addTag(Tag $tag): void
     {
-        if (!$this->tags->contains($tag)) {
-            $this->tags->add($tag);
-        }
-
-        return $this;
+        $this->tags[] = $tag;
     }
-
     public function removeTag(Tag $tag): self
     {
         $this->tags->removeElement($tag);

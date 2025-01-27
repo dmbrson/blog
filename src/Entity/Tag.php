@@ -3,9 +3,9 @@
 namespace App\Entity;
 
 use App\Repository\TagRepository;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Doctrine\ORM\PersistentCollection;
 
 #[ORM\Entity(repositoryClass: TagRepository::class)]
 class Tag
@@ -17,14 +17,6 @@ class Tag
 
     #[ORM\Column(length: 255)]
     private ?string $name = null;
-
-    #[ORM\ManyToMany(targetEntity: Blog::class, mappedBy: 'tags')]
-    private Collection $blogs;
-
-    public function __construct()
-    {
-        $this->blogs = new ArrayCollection();
-    }
 
     public function getId(): ?int
     {
@@ -41,10 +33,5 @@ class Tag
         $this->name = $name;
 
         return $this;
-    }
-
-    public function getBlogs(): Collection
-    {
-        return $this->blogs;
     }
 }
