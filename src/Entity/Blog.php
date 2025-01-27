@@ -20,14 +20,16 @@ class Blog
     #[ORM\Column]
     private ?int $id = null;
 
+
+    #[Assert\NotBlank(message: 'Заголовок обезателен для заполнения')]
     #[ORM\Column(length: 255)]
     private ?string $title = null;
 
-
+    #[Assert\NotBlank(message: 'Текст обезателен для заполнения')]
     #[ORM\Column(type: Types::TEXT)]
     private ?string $text = null;
 
-
+    #[Assert\NotBlank(message: 'Категория обезательна для заполнения')]
     #[ORM\ManyToOne(targetEntity: Category::class)]
     #[ORM\JoinColumn(name: 'category_id', referencedColumnName: 'id')]
     private ?Category $category = null;
