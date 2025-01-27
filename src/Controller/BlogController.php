@@ -13,10 +13,10 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use App\Filter\BlogFilter;
 
-#[Route('/blog')]
+#[Route('admin/blog')]
 final class BlogController extends AbstractController
 {
-    #[Route(name: 'app_blog_index', methods: ['GET'])]
+    #[Route('/', name: 'app_blog_index', methods: ['GET'])]
     public function index(Request $request, BlogRepository $blogRepository): Response
     {
         $blogFilter = new BlogFilter();

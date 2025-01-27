@@ -10,8 +10,8 @@ use Symfony\Component\Routing\Annotation\Route;
 class DefaultController extends AbstractController
 {
     #[Route('/', name: 'blog_default')]
-    public function index(BlogRepository $blogRepository): Response
+    public function index(): Response
     {
-        return $this->redirectToRoute('app_blog_index');
+        return new Response();
     }
 }
