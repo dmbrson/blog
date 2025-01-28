@@ -10,6 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\PersistentCollection;
 use PhpParser\Node\Expr\Array_;
 use Symfony\Component\Mime\Address;
+use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: BlogRepository::class)]
@@ -57,6 +58,11 @@ class Blog
     #[ORM\ManyToMany(targetEntity: 'App\Entity\Tag', cascade: ['persist'])]
     private ArrayCollection|PersistentCollection $tags;
 
+    public function __construct(UserInterface|User $user = null) {
+        $this->user = $user;
+        $this->tags = new ArrayCollection();
+    }
+
     public function getId(): ?int
     {
         return $this->id;
@@ -96,11 +102,6 @@ class Blog
         $this->category = $category;
 
         return $this;
-    }
-
-    public function __construct()
-    {
-        $this->tags = new ArrayCollection();
     }
 
     public function getTags(): ArrayCollection|PersistentCollection

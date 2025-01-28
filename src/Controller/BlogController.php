@@ -37,7 +37,8 @@ final class BlogController extends AbstractController
     #[Route('/new', name: 'app_user_blog_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
-        $blog = new Blog();
+        $blog = new Blog($this->getUser());
+
         $form = $this->createForm(BlogType::class, $blog);
         $form->handleRequest($request);
 
@@ -45,7 +46,7 @@ final class BlogController extends AbstractController
             $entityManager->persist($blog);
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_blog_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_user_blog', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('blog/new.html.twig', [
@@ -63,7 +64,7 @@ final class BlogController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_blog_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_user_blog_index', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('blog/edit.html.twig', [
@@ -82,6 +83,6 @@ final class BlogController extends AbstractController
             $this->addFlash('success', 'Blog deleted successfully.');
         }
 
-        return $this->redirectToRoute('app_blog_index', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('app_user_blog_index', [], Response::HTTP_SEE_OTHER);
     }
 }

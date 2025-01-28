@@ -38,7 +38,10 @@
 
     </div>
     <br>
-    <a href="{{ path('app_blog_index') }}" class="btn btn-primary">back to list</a>
-
+    {% if is_granted = 'ADMIN_ROLE' %}
+        <a href="{{ path('app_blog_index') }}" class="btn btn-primary">back to list</a>
+    {% else %}
+        <a href="{{ path('app_user_blog_index') }}" class="btn btn-primary">back to list</a>
+    {% endif %}
 
 {% endblock %}
