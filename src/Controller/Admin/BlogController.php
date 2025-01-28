@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller;
+namespace App\Controller\Admin;
 
 use App\Entity\Blog;
 use App\Filter\BlogFilter;
@@ -13,13 +13,13 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
-#[Route('user/blog')]
+#[Route('admin/blog')]
 final class BlogController extends AbstractController
 {
-    #[Route('/', name: 'app_user_blog_index', methods: ['GET'])]
+    #[Route('/', name: 'app_blog_index', methods: ['GET'])]
     public function index(Request $request, BlogRepository $blogRepository): Response
     {
-        $blogFilter = new BlogFilter($this->getUser());
+        $blogFilter = new BlogFilter();
 
         $form = $this->createForm(BlogFilterType::class, $blogFilter);
         $form->handleRequest($request);
@@ -34,7 +34,7 @@ final class BlogController extends AbstractController
         ]);
     }
 
-    #[Route('/new', name: 'app_user_blog_new', methods: ['GET', 'POST'])]
+    #[Route('/new', name: 'app_blog_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
         $blog = new Blog();
@@ -54,7 +54,15 @@ final class BlogController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}/edit', name: 'app_user_blog_edit', methods: ['GET', 'POST'])]
+    #[Route('/{id}', name: 'app_blog_show', methods: ['GET'])]
+    public function show(Blog $blog): Response
+    {
+        return $this->render('blog/show.html.twig', [
+            'blog' => $blog,
+        ]);
+    }
+
+    #[Route('/{id}/edit', name: 'app_blog_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Blog $blog, EntityManagerInterface $entityManager): Response
     {
         $form = $this->createForm(BlogType::class, $blog);
@@ -72,7 +80,7 @@ final class BlogController extends AbstractController
         ]);
     }
 
-    #[Route('/delete/{id}', name: 'app_user_blog_delete', methods: ['POST'])]
+    #[Route('/delete/{id}', name: 'app_blog_delete', methods: ['POST'])]
     public function delete(Request $request, Blog $blog, EntityManagerInterface $entityManager): Response
     {
         if ($this->isCsrfTokenValid('delete'.$blog->getId(), $request->request->get('_token'))) {

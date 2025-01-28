@@ -10,8 +10,8 @@ use Symfony\Component\Routing\Annotation\Route;
 class DefaultController extends AbstractController
 {
     #[Route('/', name: 'blog_default')]
-    public function index(): Response
+    public function index(BlogRepository $blogRepository): Response
     {
-        return new Response();
+        return $this->render('default/index.html.twig', ['blogs' => $blogRepository->GetBlogs()]);
     }
 }
