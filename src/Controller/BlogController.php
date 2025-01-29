@@ -23,6 +23,14 @@ final class BlogController extends AbstractController
     {
         $blogFilter = new BlogFilter();
 
+        // Получаем текущего пользователя
+        $user = $this->getUser();
+
+        // Если пользователь не админ, фильтруем блоги только по нему
+        if (!$this->isGranted('ROLE_ADMIN')) {
+            $blogFilter->setUser($user);
+        }
+
         $form = $this->createForm(BlogFilterType::class, $blogFilter);
         $form->handleRequest($request);
 
