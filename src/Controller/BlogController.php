@@ -12,6 +12,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route('user/blog')]
 final class BlogController extends AbstractController
@@ -46,7 +47,7 @@ final class BlogController extends AbstractController
             $entityManager->persist($blog);
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_user_blog', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_user_blog_index', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('blog/new.html.twig', [
@@ -55,6 +56,7 @@ final class BlogController extends AbstractController
         ]);
     }
 
+    #[IsGranted('edit', 'blog')]
     #[Route('/{id}/edit', name: 'app_user_blog_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Blog $blog, EntityManagerInterface $entityManager): Response
     {
@@ -73,13 +75,13 @@ final class BlogController extends AbstractController
         ]);
     }
 
+    #[IsGranted('edit', 'blog')]
     #[Route('/delete/{id}', name: 'app_user_blog_delete', methods: ['POST'])]
     public function delete(Request $request, Blog $blog, EntityManagerInterface $entityManager): Response
     {
         if ($this->isCsrfTokenValid('delete'.$blog->getId(), $request->request->get('_token'))) {
             $entityManager->remove($blog);
             $entityManager->flush();
-
             $this->addFlash('success', 'Blog deleted successfully.');
         }
 

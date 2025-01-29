@@ -16,6 +16,9 @@
         <thead>
             <tr>
                 <th>Id</th>
+                {% if is_granted('ROLE_ADMIN') %}
+                    <th>Owner</th>
+                {% endif %}
                 <th>Title</th>
                 <th>Text</th>
                 <th>Category</th>
@@ -26,8 +29,11 @@
         {% for blog in blogs %}
             <tr>
                 <td>{{ blog.id }}</td>
+                {% if blog.user and is_granted('ROLE_ADMIN') %}
+                    <td>{{ blog.user.email }}</td>
+                {% endif %}
                 <td>{{ blog.title }}</td>
-                <td>{{ blog.text }}</td>
+                <td>{{ blog.text|slice(0, 50) ~ (blog.text|length > 50 ? '...' : '') }}</td>
                 <td>
                     {% if blog.category is not null %}
                         {{ blog.category.name }}
@@ -36,8 +42,11 @@
                     {% endif %}
                 </td>
                 <td>
-                    <a href="{{ path('app_blog_show', {'id': blog.id}) }}" class="btn btn-outline-light btn-sm">show</a>
-                    <a href="{{ path('app_blog_edit', {'id': blog.id}) }}" class="btn btn-outline-warning btn-sm">edit</a>
+                    {% if is_granted('ROLE_ADMIN') %}
+                        <a href="{{ path('app_blog_edit', {'id': blog.id}) }}" class="btn btn-outline-warning btn-sm">edit</a>
+                    {% else %}
+                        <a href="{{ path('app_user_blog_edit', {'id': blog.id}) }}" class="btn btn-outline-warning btn-sm">edit</a>
+                    {% endif %}
                 </td>
             </tr>
         {% else %}

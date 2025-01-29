@@ -30,7 +30,10 @@ class Blog
     #[ORM\Column(type: Types::TEXT)]
     private ?string $text = null;
 
-    #[Assert\NotBlank(message: 'Категория обезательна для заполнения')]
+    #[Assert\NotBlank(
+        message: 'Категория обезательна для заполнения',
+        groups: ['create', 'edit']
+    )]
     #[ORM\ManyToOne(targetEntity: Category::class)]
     #[ORM\JoinColumn(name: 'category_id', referencedColumnName: 'id')]
     private ?Category $category = null;
