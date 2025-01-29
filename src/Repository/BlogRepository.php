@@ -42,6 +42,6 @@ class BlogRepository extends ServiceEntityRepository
 
         }
 
-    return $blogs->getQuery()->getResult();
+    return $blogs;
     }
 }
