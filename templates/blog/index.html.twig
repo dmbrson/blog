@@ -22,6 +22,7 @@
                 <th>Title</th>
                 <th>Text</th>
                 <th>Category</th>
+                {% if is_granted('ROLE_ADMIN') %}<th>Percent</th>{% endif %}
                 <th>Actions</th>
             </tr>
         </thead>
@@ -42,7 +43,8 @@
                     {% endif %}
                 </td>
                 <td>
-                    {% if is_granted('ROLE_ADMIN') %}
+                {% if is_granted('ROLE_ADMIN') %}
+                <td>{{ blog.percent }}</td>
                         <a href="{{ path('app_blog_edit', {'id': blog.id}) }}" class="btn btn-outline-warning btn-sm">edit</a>
                     {% else %}
                         <a href="{{ path('app_user_blog_edit', {'id': blog.id}) }}" class="btn btn-outline-warning btn-sm">edit</a>

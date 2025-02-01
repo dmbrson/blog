@@ -12,6 +12,7 @@ use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -28,17 +29,22 @@ class BlogType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('title')
-            ->add('text')
+            ->add('title', TextType::class, [
+                'label' => 'Заголовок',
+                'required' => true,
+            ])
+            ->add('text', TextareaType::class, [
+                'label' => 'Текст',
+                'required' => true,
+            ])
             ->add('category', EntityType::class, [
                 'class' => Category::class,
                 'choice_label' => 'name',
             ])
-            ->add('tags', TextType::class, array(
+            ->add('tags', TextType::class, [
                 'label' => 'Теги',
                 'required' => false,
-            ))
-        ;
+            ]);
 
         if ($this->security->isGranted('ROLE_ADMIN')) {
             $builder->add('user', EntityType::class, [
@@ -54,7 +60,6 @@ class BlogType extends AbstractType
         }
 
         $builder->get('tags')->addModelTransformer($this->transformer);
-
     }
 
     public function configureOptions(OptionsResolver $resolver): void
