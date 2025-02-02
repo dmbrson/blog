@@ -16,11 +16,11 @@
         <thead>
             <tr>
                 <th>Id</th>
-                {% if is_granted('ROLE_ADMIN') %}<th>Owner</th>{% endif %}
+                <th>{% if is_granted('ROLE_ADMIN') %}Owner{% endif %}</th>
                 <th>Title</th>
                 <th>Text</th>
                 <th>Category</th>
-                {% if is_granted('ROLE_ADMIN') and showPercent %}<th>Percent</th>{% endif %}
+                <th>Percent</th>
                 <th>Actions</th>
             </tr>
         </thead>
@@ -28,9 +28,7 @@
         {% for blog in blogs %}
             <tr>
                 <td>{{ blog.id }}</td>
-                {% if blog.user and is_granted('ROLE_ADMIN') %}
-                    <td>{{ blog.user.email }}</td>
-                {% endif %}
+                <td>{% if blog.user and is_granted('ROLE_ADMIN') %}{{ blog.user.email }}{% endif %}</td>
                 <td>{{ blog.title }}</td>
                 <td>{{ blog.text|slice(0, 50) ~ (blog.text|length > 50 ? '...' : '') }}</td>
                 <td>
@@ -40,13 +38,10 @@
                         No category
                     {% endif %}
                 </td>
+                <td>{{ blog.percent }}</td>
                 <td>
-                {% if is_granted('ROLE_ADMIN') %}
-                    {% if showPercent %}<td>{{ blog.percent }}</td>{% endif %}
-                        <a href="{{ path('app_blog_edit', {'id': blog.id}) }}" class="btn btn-outline-warning btn-sm">edit</a>
-                    {% else %}
-                        <a href="{{ path('app_user_blog_edit', {'id': blog.id}) }}" class="btn btn-outline-warning btn-sm">edit</a>
-                    {% endif %}
+                    <a href="{{ path('app_user_blog_edit', {'id': blog.id}) }}" class="btn btn-outline-warning btn-sm">edit</a>
+                </td>
 
             </tr>
         {% else %}
