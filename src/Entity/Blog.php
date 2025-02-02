@@ -38,7 +38,7 @@ class Blog
     #[ORM\JoinColumn(name: 'category_id', referencedColumnName: 'id')]
     private ?Category $category = null;
 
-    #[Assert\NotBlank(message: 'Категория обезательна для заполнения')]
+    #[Assert\NotBlank(message: 'Пользователь обезателен для заполнения')]
     #[ORM\ManyToOne(targetEntity: User::class)]
     #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id')]
     private User|null $user = null;
@@ -62,7 +62,7 @@ class Blog
     private ArrayCollection|PersistentCollection $tags;
 
     #[ORM\Column(type: Types::SMALLINT, nullable: true)]
-    private ?string $percent = null;
+    private ?int $percent = null;
 
     public function __construct(UserInterface|User $user = null) {
         $this->user = $user;

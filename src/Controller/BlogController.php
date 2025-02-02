@@ -60,10 +60,10 @@ final class BlogController extends AbstractController
             $entityManager->persist($blog);
             $entityManager->flush();
 
-            $blog->setPercent(
-                $contentWatchApi->checkText($blog->getText())
-            );
-            $entityManager->flush();
+//            $blog->setPercent(
+//                $contentWatchApi->checkText($blog->getText())
+//            );
+//            $entityManager->flush();
 
             return $this->redirectToRoute('app_user_blog_index', [], Response::HTTP_SEE_OTHER);
         }

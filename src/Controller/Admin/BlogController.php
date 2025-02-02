@@ -32,9 +32,18 @@ final class BlogController extends AbstractController
             5
         );
 
+        $showPercent = false;
+        foreach ($pagination as $blog) {
+            if ($blog->getPercent() !== null) {
+                $showPercent = true;
+                break;
+            }
+        }
+
         return $this->render('blog/index.html.twig', [
             'blogs' => $pagination,
             'searchForm' => $form->createView(),
+            'showPercent' => $showPercent,
         ]);
     }
 
@@ -50,10 +59,10 @@ final class BlogController extends AbstractController
             $entityManager->persist($blog);
             $entityManager->flush();
 
-            $blog->setPercent(
-                $contentWatchApi->checkText($blog->getText())
-            );
-            $entityManager->flush();
+//            $blog->setPercent(
+//                $contentWatchApi->checkText($blog->getText())
+//            );
+//            $entityManager->flush();
 
             return $this->redirectToRoute('app_blog_index', [], Response::HTTP_SEE_OTHER);
         }

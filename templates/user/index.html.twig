@@ -10,6 +10,8 @@
     <tr>
         <th>Id</th>
         <th>Email</th>
+        <th>Role</th>
+        <th>Login</th>
     </tr>
     </thead>
     <tbody>
@@ -17,7 +19,8 @@
     <tr>
         <td>{{ user.id }}</td>
         <td>{{ user.email }}</td>
-        <td> <a href="{{ url('app_blog_index', {'_switch_user': user.email}) }}">Login </a>
+        <td>{{ user.roles|join(', ') }}</td>
+        <td> <a href="{{ path('app_login_redirect', {'_switch_user': user.email}) }}">Login </a>
         </td>
     </tr>
     {% else %}
